@@ -11,3 +11,6 @@ Large scale app will have components
 
 ## Pros
 - extra dev tools that can be found here: https://github.com/vuejs/vue-devtools
+
+## Cons
+- reactivity happens only to the properties set up when the vue object is created

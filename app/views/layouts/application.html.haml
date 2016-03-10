@@ -1,0 +1,13 @@
+!!!
+%html.no-js{lang: 'en'}
+  %head
+    %title Front End Comparison
+    = csrf_meta_tags
+
+  %body
+    = yield
+    = javascript_include_tag 'application', async: true, debug: false
+    - if @framework.present?
+      = javascript_include_tag "application.#{@framework}", async: true, debug: false
+    - else 
+      %h1 Set up a framework to view the page

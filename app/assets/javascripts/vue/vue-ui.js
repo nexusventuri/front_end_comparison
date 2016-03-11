@@ -4,12 +4,22 @@ new Vue({
     todos: [
       { title: 'My first todo', value: 10, option: 'price' },
       { title: 'My second todo', value: 20, option: 'seconds' },
-      { title: 'My third todo', value: 100, option: 'pounds' }
-    ]
+      { title: 'My third todo', value: 100, option: 'pounds' },
+      { title: 'My forth todo', value: 100, option: 'milliseconds' }
+    ],
+    title: 'badass'
   },
-  computed: {
+  methods: {
     format_value(todo) {
-      return todo.value + 'lalala'
+      if(todo.option == 'price') {
+        return `$${todo.value}`;
+      } else if (todo.option == 'seconds') {
+        return `${todo.value}s`;
+      } else if (todo.option == 'milliseconds') {
+        return `${todo.value}ms`;
+      } else {
+        return `£${todo.value}`;
+      }
     }
   },
   created() {

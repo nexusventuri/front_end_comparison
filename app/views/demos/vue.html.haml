@@ -1,8 +1,10 @@
 .content
   #ui
+    %h1 {{ title }}
     %ul.todos(v-for='todo in todos')
       %li.todo
         .todo__title {{ todo.title }} 
-        .todo__value {{ todo.value }} 
         .todo__value {{ format_value(todo) }} 
-        .todo__option {{ todo.option }}
+    %form{"v-on:submit.prevent" => true}
+      %input(v-model="newTodo")
+      %select(v-model="newTodo")

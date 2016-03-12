@@ -14,7 +14,10 @@ Vue.component('todo', {
       }
     }
   }
+})
 
+Vue.component('todoForm', {
+  template: '#todo-form'
 })
 
 new Vue({
@@ -25,8 +28,7 @@ new Vue({
       { title: 'My second todo', value: 20, option: 'seconds' },
       { title: 'My third todo', value: 100, option: 'pounds' },
       { title: 'My forth todo', value: 100, option: 'milliseconds' }
-    ],
-    title: 'badass'
+    ]
   },
   created() {
     //created callback

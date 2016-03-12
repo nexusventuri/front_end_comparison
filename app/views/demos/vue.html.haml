@@ -1,16 +1,21 @@
-%template#todo
-  %li.todo
-    .todo__title {{ todo.title }} 
-    .todo__value {{ format_value(todo) }} 
-
-%template#todo-form
-  %form{"v-on:submit.prevent" => true}
-    %input(v-model="newTodo")
-    %select(v-model="newTodo")
-
 .content
   #ui
     %h1 Todos
-    %ul.todos(v-for='todo in todos')
-      %todo{':todo' => 'todo'}
-    %todo-form
+    %ul.todos(v-for='todoItem in todos')
+      %todo{'v-bind:todoprop' => 'todoItem'}
+    %todo-form{'v-on:new-todo-submitted' => 'addTodo'}
+
+%template#todo
+  %li.todo
+    .todo__title {{ todoprop.title }} 
+    .todo__value {{ format_value(todoprop) }} 
+
+%template#todo-form
+  %form{"v-on:submit.prevent" => 'todoSubmit'}
+    %input(v-model="newTodo.title")
+    %input(v-model="newTodo.value")
+    %select(v-model="newTodo.option")
+      %option(value="dollars") Dollars
+      %option(value="pounds") Pounds
+    %input(type='submit')
+

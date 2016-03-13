@@ -19,7 +19,6 @@ Vue.component('todoForm', {
   },
   methods: {
     todoSubmit() {
-      console.log(this.newTodo)
       this.$dispatch('new-todo-submitted', this.newTodo)
       this.newTodo = {}
     }
@@ -29,17 +28,18 @@ Vue.component('todoForm', {
 new Vue({
   el: '#ui',
   data: {
-    todos: [
-      { title: 'My first todo', value: 10, option: 'dollars' },
-      { title: 'My third todo', value: 100, option: 'pounds' }
-    ]
+    todos: [ ]
   },
   methods: {
     addTodo(todo) {
       this.todos.push(todo);
     }
   },
-  created() {
-    //created callback
+  ready() {
+    $.get('/todos', (response) => {
+      $.each(response, (key, value) => {
+        this.todos.push(value)
+      })
+    })
   }
 })

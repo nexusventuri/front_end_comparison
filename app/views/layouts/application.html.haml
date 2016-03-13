@@ -6,7 +6,6 @@
 
   %body
     = yield
-    = javascript_include_tag 'application', async: true, debug: false
     - if @framework.present?
       = javascript_include_tag "application.#{@framework}", async: true, debug: false
     - else 

@@ -3,14 +3,16 @@
     %h1 Todos
     %ul.todos
       %todo-component{'v-for' => 'todoItem in todos', 'v-bind:todo-prop' => 'todoItem', 'v-on:delete-todo' => 'deleteTodo'}
-    %todo-form{'v-on:new-todo-submitted' => 'addTodo'}
+    %todo-form{'v-on:form-submitted' => 'addTodo'}
 
 %template#todo-template
-  %li.todo
+  %li.todo{'v-show' => '!edit'}
     .todo__title {{ todoProp.title }} 
     .todo__value {{ formatValue(todoProp) }} 
     %a.todo__delete{'v-on:click' => 'deleteTodo(todoProp)'} delete
-    %a.todo__edit edit
+    %a.todo__edit{'v-on:click' => 'toggleEdit'} edit
+  %todo-form{'v-show' => 'edit', 'v-on:form-submitted' => 'updateTodo'}
+
 
 %template#todo-form
   %form{"v-on:submit.prevent" => 'todoSubmit'}

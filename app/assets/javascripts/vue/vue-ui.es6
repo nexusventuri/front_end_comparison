@@ -1,6 +1,11 @@
 Vue.component('todo-component', {
   template: '#todo-template',
   props: ['todoProp'],
+  data() {
+    return {
+      edit: false
+    }
+  },
   methods: {
     formatValue(todo) {
       if(todo.option == 'dollars') {
@@ -11,6 +16,13 @@ Vue.component('todo-component', {
     },
     deleteTodo(todo) {
       this.$dispatch('delete-todo', todo);
+    },
+    toggleEdit() {
+      this.edit = !this.edit;
+    },
+    updateTodo(todo) {
+      this.todoProp = todo;
+      this.toggleEdit();
     }
   }
 })
@@ -22,7 +34,7 @@ Vue.component('todo-form', {
   },
   methods: {
     todoSubmit() {
-      this.$dispatch('new-todo-submitted', this.newTodo)
+      this.$dispatch('form-submitted', this.newTodo)
       this.newTodo = {}
     }
   }

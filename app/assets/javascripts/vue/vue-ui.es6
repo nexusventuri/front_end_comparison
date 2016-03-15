@@ -1,18 +1,21 @@
-Vue.component('todo', {
-  template: '#todo',
-  props: ['todoprop'],
+Vue.component('todo-component', {
+  template: '#todo-template',
+  props: ['todoProp'],
   methods: {
-    format_value(todo) {
+    formatValue(todo) {
       if(todo.option == 'dollars') {
         return `${todo.value}$`;
       } else {
         return `£${todo.value}`;
       }
+    },
+    deleteTodo(todo) {
+      this.$dispatch('delete-todo', todo);
     }
   }
 })
 
-Vue.component('todoForm', {
+Vue.component('todo-form', {
   template: '#todo-form',
   data() {
     return { newTodo: { title: '', value: '', option: '' } }
@@ -33,6 +36,11 @@ new Vue({
   methods: {
     addTodo(todo) {
       this.todos.push(todo);
+    },
+    deleteTodo(todo) {
+      console.log('deleting todo');
+      console.log(todo)
+      this.todos.$remove(todo);
     }
   },
   ready() {

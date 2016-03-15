@@ -1,14 +1,16 @@
 .content
   #ui
     %h1 Todos
-    %ul.todos(v-for='todoItem in todos')
-      %todo{'v-bind:todoprop' => 'todoItem'}
+    %ul.todos
+      %todo-component{'v-for' => 'todoItem in todos', 'v-bind:todo-prop' => 'todoItem', 'v-on:delete-todo' => 'deleteTodo'}
     %todo-form{'v-on:new-todo-submitted' => 'addTodo'}
 
-%template#todo
+%template#todo-template
   %li.todo
-    .todo__title {{ todoprop.title }} 
-    .todo__value {{ format_value(todoprop) }} 
+    .todo__title {{ todoProp.title }} 
+    .todo__value {{ formatValue(todoProp) }} 
+    %a.todo__delete{'v-on:click' => 'deleteTodo(todoProp)'} delete
+    %a.todo__edit edit
 
 %template#todo-form
   %form{"v-on:submit.prevent" => 'todoSubmit'}

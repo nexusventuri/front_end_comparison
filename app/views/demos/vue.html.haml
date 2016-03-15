@@ -1,18 +1,19 @@
 .content
   #ui
     %h1 Todos
+    %select(v-model='selectedFilter')
+      %option(v-for='filter in filters' v-bind:value='filter') {{filter}}
     %ul.todos
-      %todo-component{'v-for' => 'todoItem in todos', 'v-bind:todo-prop' => 'todoItem', 'v-on:delete-todo' => 'deleteTodo'}
+      %todo-show{'v-for' => 'todoItem in filteredTodos()', 'v-bind:todoprop' => 'todoItem', 'v-on:delete-todo' => 'deleteTodo'}
     %todo-form{'v-on:form-submitted' => 'addTodo'}
 
 %template#todo-template
   %li.todo{'v-show' => '!edit'}
-    .todo__title {{ todoProp.title }} 
-    .todo__value {{ formatValue(todoProp) }} 
-    %a.todo__delete{'v-on:click' => 'deleteTodo(todoProp)'} delete
+    .todo__title {{ todoprop.title }} 
+    .todo__value {{ formatValue(todoprop) }} 
+    %a.todo__delete{'v-on:click' => 'deleteTodo(todoprop)'} delete
     %a.todo__edit{'v-on:click' => 'toggleEdit'} edit
   %todo-form{'v-show' => 'edit', 'v-on:form-submitted' => 'updateTodo'}
-
 
 %template#todo-form
   %form{"v-on:submit.prevent" => 'todoSubmit'}

@@ -1,6 +1,6 @@
-Vue.component('todo-component', {
+Vue.component('todo-show', {
   template: '#todo-template',
-  props: ['todoProp'],
+  props: ['todoprop'],
   data() {
     return {
       edit: false
@@ -21,7 +21,7 @@ Vue.component('todo-component', {
       this.edit = !this.edit;
     },
     updateTodo(todo) {
-      this.todoProp = todo;
+      this.todoprop = todo;
       this.toggleEdit();
     }
   }
@@ -43,7 +43,16 @@ Vue.component('todo-form', {
 new Vue({
   el: '#ui',
   data: {
-    todos: [ ]
+    todos: [ ],
+    filters: ['all'],
+    selectedFilter: 'all',
+    filteredTodos() {
+      let result = this.todos.filter((todo) => {
+        return this.selectedFilter == 'all' || todo.option == this.selectedFilter;
+      })
+      console.log(result)
+      return result;
+    }
   },
   methods: {
     addTodo(todo) {
@@ -59,7 +68,10 @@ new Vue({
     $.get('/todos', (response) => {
       $.each(response, (key, value) => {
         this.todos.push(value)
+        this.filters.push(value.option)
       })
+
+      this.filters = [...new Set(this.filters)]
     })
   }
 })

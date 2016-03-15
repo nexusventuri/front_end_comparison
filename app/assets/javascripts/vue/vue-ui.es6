@@ -50,7 +50,6 @@ new Vue({
       let result = this.todos.filter((todo) => {
         return this.selectedFilter == 'all' || todo.option == this.selectedFilter;
       })
-      console.log(result)
       return result;
     }
   },
@@ -59,19 +58,18 @@ new Vue({
       this.todos.push(todo);
     },
     deleteTodo(todo) {
-      console.log('deleting todo');
-      console.log(todo)
       this.todos.$remove(todo);
     }
   },
   ready() {
     $.get('/todos', (response) => {
+      let allOptions = []
       $.each(response, (key, value) => {
         this.todos.push(value)
-        this.filters.push(value.option)
+        allOptions.push(value.option)
       })
 
-      this.filters = [...new Set(this.filters)]
+      this.filters = [...new Set(allOptions)]
     })
   }
 })

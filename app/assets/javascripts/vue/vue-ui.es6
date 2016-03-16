@@ -43,33 +43,60 @@ Vue.component('todo-form', {
 new Vue({
   el: '#ui',
   data: {
-    todos: [ ],
-    filters: ['all'],
-    selectedFilter: 'all',
+    todos: [],
     filteredTodos() {
       let result = this.todos.filter((todo) => {
         return this.selectedFilter == 'all' || todo.option == this.selectedFilter;
       })
-      return result;
-    }
+
+      return this.sortTodos(result);
+    },
+    filters: [],
+    selectedFilter: 'all',
+
+    selectedSortMethod: 'none',
+    sortMethods: ['none']
   },
   methods: {
     addTodo(todo) {
       this.todos.push(todo);
     },
+
     deleteTodo(todo) {
       this.todos.$remove(todo);
+    }, 
+
+    sortTodos(todos) {
+      if(this.selectedSortMethod == 'none') {
+        return todos;
+      }
+
+      let field = this.selectedSortMethod 
+      todos.sort((a, b) => {
+        if(a[field] > b[field]) {
+          return 1;
+        } else if(a[field] < b[field]) {
+          return -1;
+        }
+        return 0;
+      })
+      return todos;
+    },
+
+    loadNewCollection() {
+      this.loadFromUrl('/todos/search')
+    },
+    loadFromUrl(url) {
+      $.get(url, (response) => {
+        let allOptions = ['all'].concat(response.map((element) => {return element.option}))
+        this.todos = response;
+        this.filters = [...new Set(allOptions)]
+        this.sortMethods = ['none'].concat(Object.keys(this.todos[0]))
+      })
     }
   },
-  ready() {
-    $.get('/todos', (response) => {
-      let allOptions = []
-      $.each(response, (key, value) => {
-        this.todos.push(value)
-        allOptions.push(value.option)
-      })
 
-      this.filters = [...new Set(allOptions)]
-    })
+  ready() {
+    this.loadFromUrl('/todos');
   }
 })

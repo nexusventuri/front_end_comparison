@@ -35,13 +35,13 @@ Vue.component('todo-show', {
 
 Vue.component('todo-form', {
   template: '#todo-form',
-  data() {
-    return { newTodo: { title: '', value: '', option: '' } }
-  },
+  props: ['todo', 'newtodo'],
   methods: {
     todoSubmit() {
-      this.$dispatch('form-submitted', this.newTodo)
-      this.newTodo = {}
+      this.$dispatch('form-submitted', this.todo)
+      if(this.newtodo) {
+        this.todo = {};
+      }
     }
   }
 })

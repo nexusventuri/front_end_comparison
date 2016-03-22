@@ -12,7 +12,7 @@
       %ul
         %todo-show{'v-for' => 'todoItem in filteredTodos', 'v-bind:todoprop' => 'todoItem', 'v-on:delete-todo' => 'deleteTodo'}
       %h2 Add a new todo
-      %todo-form{'v-on:form-submitted' => 'addTodo'}
+      %todo-form{'v-on:form-submitted' => 'addTodo', 'v-bind:todo' => '{}' , 'v-bind:newtodo' => 'true'}
 
 %template#todo-template
   %li.todo{'v-show' => '!edit'}
@@ -20,13 +20,13 @@
     .todo__value {{ formatValue(todoprop) }} 
     %a.todo__delete{'v-on:click' => 'deleteTodo(todoprop)'} delete
     %a.todo__edit{'v-on:click' => 'toggleEdit'} edit
-  %todo-form{'v-show' => 'edit', 'v-on:form-submitted' => 'updateTodo'}
+  %todo-form{'v-show' => 'edit', 'v-on:form-submitted' => 'updateTodo', 'v-bind:todo' => 'todoprop'}
 
 %template#todo-form
   %form{"v-on:submit.prevent" => 'todoSubmit'}
-    %input(v-model="newTodo.title")
-    %input(v-model="newTodo.value")
-    %select(v-model="newTodo.option")
+    %input(v-model="todo.title")
+    %input(v-model="todo.value")
+    %select(v-model="todo.option")
       %option(value="dollars") Dollars
       %option(value="pounds") Pounds
     %input(type='submit')

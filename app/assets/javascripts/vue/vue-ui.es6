@@ -3,7 +3,7 @@ Vue.component('todo-show', {
   props: ['todoprop'],
   data() {
     return {
-      edit: false
+      isEditing: false
     }
   },
   methods: {
@@ -20,13 +20,11 @@ Vue.component('todo-show', {
     },
 
     toggleEdit() {
-      this.edit = !this.edit;
+      this.isEditing = !this.isEditing;
     },
 
     updateTodo(todo) {
-      this.todoprop.title = todo.title;
-      this.todoprop.value = todo.value;
-      this.todoprop.option = todo.option;
+      Vue.util.extend(this.todoprop, todo)
       this.toggleEdit();
     }
   }
@@ -36,16 +34,11 @@ Vue.component('todo-form', {
   template: '#todo-form',
   props: ['todo', 'isnewtodo'],
   data() {
-    let editingTodo = Vue.util.extend({}, this.todo)
-
-    if(this.isnewtodo) {
-      editingTodo = {}
-    }
-
     return {
-      editingTodo
+      editingTodo: Vue.util.extend({}, this.todo)
     }
   },
+
   methods: {
     todoSubmit() {
       this.$dispatch('form-submitted', this.editingTodo)
@@ -62,7 +55,8 @@ new Vue({
   data: {
     todos: [],
 
-    filters: [],
+    filters: {},
+    filterValues: [],
     selectedFilter: 'all',
 
     selectedSortMethod: 'none',
@@ -70,12 +64,8 @@ new Vue({
   },
 
   computed: {
-    filteredTodos() {
-      let result = this.todos.filter((todo) => {
-        return this.selectedFilter == 'all' || todo.option == this.selectedFilter;
-      })
-
-      return this.sortTodos(result);
+    selectedFilterVaue() {
+      return this.filters[this.selectedFilter]
     }
   },
 
@@ -88,33 +78,18 @@ new Vue({
       this.todos.$remove(todo);
     }, 
 
-    sortTodos(todos) {
-      if(this.selectedSortMethod == 'none') {
-        return todos;
-      }
-
-      let field = this.selectedSortMethod 
-      todos.sort((a, b) => {
-        if(a[field] > b[field]) {
-          return 1;
-        } else if(a[field] < b[field]) {
-          return -1;
-        }
-        return 0;
-      })
-      return todos;
-    },
-
     loadNewCollection() {
       this.loadFromUrl('/todos/search')
     },
 
     loadFromUrl(url) {
       $.get(url, (response) => {
-        let allOptions = ['all'].concat(response.map((element) => {return element.option}))
         this.todos = response;
-        this.filters = [...new Set(allOptions)]
         this.sortMethods = ['none'].concat(Object.keys(this.todos[0]))
+
+        this.filters['all'] = null
+        response.forEach((element) => {this.filters[element.option] = element.option})
+        this.filterValues = Object.keys(this.filters);
       })
     }
   },

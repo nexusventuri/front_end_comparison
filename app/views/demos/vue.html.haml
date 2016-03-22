@@ -4,23 +4,23 @@
     .todos{'v-show' => 'todos.length != 0', style: 'display:none'}
       %label(for='filter') Filter:
       %select#filter(v-model='selectedFilter')
-        %option(v-for='filter in filters' v-bind:value='filter') {{filter}}
+        %option(v-for='filter in filterValues' :value='filter') {{filter}}
       %label(for='sort') Sort:
       %select#sort(v-model='selectedSortMethod')
         %option(v-for='sortMethod in sortMethods' v-bind:value='sortMethod') {{sortMethod}}
       %button(v-on:click='loadNewCollection') Load new collection
       %ul
-        %todo-show{'v-for' => 'todoItem in filteredTodos', 'v-bind:todoprop' => 'todoItem', 'v-on:delete-todo' => 'deleteTodo'}
+        %todo-show{'v-for' => 'todoItem in todos | filterBy selectedFilterVaue | orderBy selectedSortMethod', 'v-bind:todoprop' => 'todoItem', 'v-on:delete-todo' => 'deleteTodo'}
       %h2 Add a new todo
       %todo-form{'v-on:form-submitted' => 'addTodo', ':todo' => '{}' , 'isnewtodo' => 'true'}
 
 %template#todo-template
-  %li.todo{'v-show' => '!edit'}
+  %li.todo{'v-show' => '!isEditing'}
     .todo__title {{ todoprop.title }} 
     .todo__value {{ formatValue(todoprop) }} 
     %a.todo__delete{'v-on:click' => 'deleteTodo(todoprop)'} delete
     %a.todo__edit{'v-on:click' => 'toggleEdit'} edit
-  %todo-form{'v-show' => 'edit', 'v-on:form-submitted' => 'updateTodo', ':todo' => 'todoprop'}
+  %todo-form{'v-show' => 'isEditing', 'v-on:form-submitted' => 'updateTodo', ':todo' => 'todoprop'}
 
 %template#todo-form
   %form{"v-on:submit.prevent" => 'todoSubmit'}

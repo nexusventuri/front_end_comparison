@@ -7,7 +7,3 @@ preload_app!
 rackup      DefaultRackup
 
 bind 'tcp://0.0.0.0:3002'
-
-on_worker_boot do
-  ActiveRecord::Base.establish_connection
-end

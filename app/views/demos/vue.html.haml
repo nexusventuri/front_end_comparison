@@ -1,14 +1,17 @@
-.content
-  #ui
+.outer-container
+  #ui.content
     %h1 Todos
     .todos{'v-show' => 'todos.length != 0', style: 'display:none'}
-      %select(v-model='selectedFilter')
+      %label(for='filter') Filter:
+      %select#filter(v-model='selectedFilter')
         %option(v-for='filter in filters' v-bind:value='filter') {{filter}}
-      %select(v-model='selectedSortMethod')
+      %label(for='sort') Sort:
+      %select#sort(v-model='selectedSortMethod')
         %option(v-for='sortMethod in sortMethods' v-bind:value='sortMethod') {{sortMethod}}
       %button(v-on:click='loadNewCollection') Load new collection
       %ul
         %todo-show{'v-for' => 'todoItem in filteredTodos()', 'v-bind:todoprop' => 'todoItem', 'v-on:delete-todo' => 'deleteTodo'}
+      %h2 Add a new todo
       %todo-form{'v-on:form-submitted' => 'addTodo'}
 
 %template#todo-template

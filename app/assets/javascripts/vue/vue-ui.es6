@@ -34,12 +34,24 @@ Vue.component('todo-show', {
 
 Vue.component('todo-form', {
   template: '#todo-form',
-  props: ['todo', 'newtodo'],
+  props: ['todo', 'isnewtodo'],
+  data() {
+    let editingTodo = Vue.util.extend({}, this.todo)
+
+    if(this.isnewtodo) {
+      editingTodo = {}
+    }
+
+    return {
+      editingTodo
+    }
+  },
   methods: {
     todoSubmit() {
-      this.$dispatch('form-submitted', this.todo)
-      if(this.newtodo) {
-        this.todo = {};
+      this.$dispatch('form-submitted', this.editingTodo)
+
+      if(this.isnewtodo) {
+        this.editingTodo = {}
       }
     }
   }

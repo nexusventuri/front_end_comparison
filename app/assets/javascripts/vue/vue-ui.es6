@@ -23,7 +23,6 @@ Vue.component('todo-show', {
       this.edit = !this.edit;
     },
 
-    //fixme
     updateTodo(todo) {
       this.todoprop.title = todo.title;
       this.todoprop.value = todo.value;

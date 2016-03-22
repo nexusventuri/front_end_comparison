@@ -14,14 +14,20 @@ Vue.component('todo-show', {
         return `£${todo.value}`;
       }
     },
+
     deleteTodo(todo) {
       this.$dispatch('delete-todo', todo);
     },
+
     toggleEdit() {
       this.edit = !this.edit;
     },
+
+    //fixme
     updateTodo(todo) {
-      this.todoprop = todo;
+      this.todoprop.title = todo.title;
+      this.todoprop.value = todo.value;
+      this.todoprop.option = todo.option;
       this.toggleEdit();
     }
   }
@@ -44,19 +50,24 @@ new Vue({
   el: '#ui',
   data: {
     todos: [],
-    filteredTodos() {
-      let result = this.todos.filter((todo) => {
-        return this.selectedFilter == 'all' || todo.option == this.selectedFilter;
-      })
 
-      return this.sortTodos(result);
-    },
     filters: [],
     selectedFilter: 'all',
 
     selectedSortMethod: 'none',
     sortMethods: ['none']
   },
+
+  computed: {
+    filteredTodos() {
+      let result = this.todos.filter((todo) => {
+        return this.selectedFilter == 'all' || todo.option == this.selectedFilter;
+      })
+
+      return this.sortTodos(result);
+    }
+  },
+
   methods: {
     addTodo(todo) {
       this.todos.push(todo);
@@ -86,6 +97,7 @@ new Vue({
     loadNewCollection() {
       this.loadFromUrl('/todos/search')
     },
+
     loadFromUrl(url) {
       $.get(url, (response) => {
         let allOptions = ['all'].concat(response.map((element) => {return element.option}))

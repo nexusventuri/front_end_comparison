@@ -10,7 +10,7 @@
         %option(v-for='sortMethod in sortMethods' v-bind:value='sortMethod') {{sortMethod}}
       %button(v-on:click='loadNewCollection') Load new collection
       %ul
-        %todo-show{'v-for' => 'todoItem in filteredTodos()', 'v-bind:todoprop' => 'todoItem', 'v-on:delete-todo' => 'deleteTodo'}
+        %todo-show{'v-for' => 'todoItem in filteredTodos', 'v-bind:todoprop' => 'todoItem', 'v-on:delete-todo' => 'deleteTodo'}
       %h2 Add a new todo
       %todo-form{'v-on:form-submitted' => 'addTodo'}
 
